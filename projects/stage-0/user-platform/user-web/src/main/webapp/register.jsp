@@ -56,12 +56,11 @@
 </head>
 <body>
 <form action="register" method="post" id="form1">
-    <h1>用户注册页面</h1>
-    <h4>装饰中......</h4>
+    <h1>用户注册</h1>
     <hr/>
     <table align="center">
         <tr>
-            <td>账      号：</td>
+            <td>用    户     名：</td>
             <td>
                 <input type="text" name="name" id="name"/>
                 <div id="nameError" style="display:inline;color:red;"></div>

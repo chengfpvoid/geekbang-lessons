@@ -43,7 +43,8 @@ public class DatabaseUserRepository implements UserRepository {
 
     @Override
     public boolean save(User user) {
-        return false;
+        return executeUpdate(INSERT_USER_DML_SQL,COMMON_EXCEPTION_HANDLER,
+                user.getName(),user.getPassword(),user.getEmail(),user.getPhoneNumber());
     }
 
     @Override
@@ -135,6 +136,41 @@ public class DatabaseUserRepository implements UserRepository {
             exceptionHandler.accept(e);
         }
         return null;
+    }
+
+    /**
+     *
+     * @param sql
+     * @param exceptionHandler
+     * @param args
+     * @return
+     */
+    protected boolean executeUpdate(String sql,
+                                 Consumer<Throwable> exceptionHandler, Object... args) {
+        Connection connection = getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            for (int i = 0; i < args.length; i++) {
+                Object arg = args[i];
+                Class argType = arg.getClass();
+
+                Class wrapperType = wrapperToPrimitive(argType);
+
+                if (wrapperType == null) {
+                    wrapperType = argType;
+                }
+
+                // Boolean -> boolean
+                String methodName = preparedStatementMethodMappings.get(argType);
+                Method method = PreparedStatement.class.getMethod(methodName, int.class,wrapperType);
+                method.invoke(preparedStatement, i + 1, arg);
+            }
+           return preparedStatement.executeUpdate() > 0;
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exceptionHandler.accept(e);
+        }
+        return false;
     }
 
 
