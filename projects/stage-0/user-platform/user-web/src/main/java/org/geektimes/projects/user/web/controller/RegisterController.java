@@ -1,8 +1,8 @@
 package org.geektimes.projects.user.web.controller;
 
+import org.geektimes.context.ComponentContext;
 import org.geektimes.projects.user.domain.User;
 import org.geektimes.projects.user.service.UserService;
-import org.geektimes.projects.user.service.impl.UserServiceImpl;
 import org.geektimes.web.mvc.controller.PageController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
 @Path("")
 public class RegisterController implements PageController {
 
-    private UserService userService = new UserServiceImpl();
+    private UserService userService;
 
     @Path("/register")
     @Override
@@ -22,12 +22,14 @@ public class RegisterController implements PageController {
         user.setPassword(request.getParameter("password"));
         user.setEmail(request.getParameter("email"));
         user.setPhoneNumber(request.getParameter("phone"));
-        boolean isSuccess = userService.register(user);
-        if (!isSuccess) {
-            request.setAttribute("info", "注册失败");
-        } else {
-            request.setAttribute("info","注册成功");
+        userService = ComponentContext.getInstance().getComponent("bean/UserService");
+        try {
+            userService.register(user);
+        } catch (Exception e) {
+            request.setAttribute("info", e.getMessage());
+            return "info.jsp";
         }
-        return "info.jsp";
+
+        return "login-form.jsp";
     }
 }

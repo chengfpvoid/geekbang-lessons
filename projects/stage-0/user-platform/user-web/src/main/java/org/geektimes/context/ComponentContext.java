@@ -20,7 +20,7 @@ public class ComponentContext {
 
     public static final String CONTEXT_NAME = ComponentContext.class.getName();
 
-    private static final String COMPONENT_ENV_CONTEXT_NAME = "java:comp/env";
+    public static final String COMPONENT_ENV_CONTEXT_NAME = "java:comp/env";
 
     private static final Logger logger = Logger.getLogger(CONTEXT_NAME);
 
@@ -133,6 +133,7 @@ public class ComponentContext {
 
     private void processPreDestroy() {
         // TODO
+
     }
 
     /**

@@ -1,6 +1,8 @@
 package org.geektimes.projects.user.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,22 +20,22 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = AUTO)
-    //  @NotNull
+   // @Min(value = 1,groups = RegisterController.class)
     private Long id;
 
     @Column
     private String name;
 
     @Column
-   // @Max(32)
-   // @Min(6)
     @Size(min = 6,max = 32)
     private String password;
 
     @Column
+    @Email
     private String email;
 
     @Column
+    @Pattern(regexp = "^1[2-9][0-9]{9}$")
     private String phoneNumber;
 
     public Long getId() {
