@@ -5,10 +5,14 @@ import org.geektimes.projects.user.domain.User;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * 自定义注解校验器
+ */
 public class UserValidAnnotationValidator implements ConstraintValidator<UserValid, User> {
 
     private int idRange;
 
+    @Override
     public void initialize(UserValid annotation) {
         this.idRange = annotation.idRange();
     }
